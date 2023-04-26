@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <style>
+        body{
+            background-color: rgb(38, 38, 38);
+            color: white;
+        }
+        #form{
+            display: block;
+            margin: 0px auto;
+            width: 50%;
+        }
+        .mydiv{
+            display: block;
+            margin: 0px auto;
+            width: 50%;
+        }
+    </style>
+    <title>Dictionary</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Dictionary</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+      <form id="form">
+        <div class="form-group">
+          <label for="exampleInputEmail1" class="mt-4 mb-3">Search your word</label>
+          <input type="text" class="form-control" id="input">
+        </div>
+        <button type="submit" class="btn btn-primary mt-3" id="sub">Search</button>
+      </form>
+</body>
+<script>
+    document.getElementById('sub').addEventListener('click',(ele)=>{
+        ele.preventDefault()
+        let key=document.getElementById('input').value;
+        // console.log(key)
+        const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': '95dd194559msh8b7209341474d43p10eed0jsn1407154502d7',
+            'X-RapidAPI-Host': 'dictionary-by-api-ninjas.p.rapidapi.com'
+        }
+        };
+
+        fetch(`https://dictionary-by-api-ninjas.p.rapidapi.com/v1/dictionary?word=${key}`, options)
+        .then(response => response.json())
+        .then(response => {
+            if(response.valid==false){
+                alert("invalid word")
+            }
+            else{
+                let div=document.createElement('div');
+                div.className="mydiv"
+                div.innerHTML=`<h2 class="my-4">Meanings</h2>`
+                let c=0
+                response.definition.split(";").forEach(element => {
+                    console.log(element)
+                    div.innerHTML+=`<p>${++c+")\t"}${element}</p>`
+                    
+                });
+                document.body.append(div)
+                // console.log(response.definition)
+            }
+        })
+        .catch(err => console.error(err));
+    })
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+</html>
